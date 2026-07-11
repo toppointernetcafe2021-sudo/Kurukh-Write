@@ -1,0 +1,3227 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover" />
+    <title>कुँड़ुख़ बन्ना — लेखन अभ्यास</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#C1783C">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
+    </script>
+
+    <style>
+        /* ===== KURUKH FONT — DO NOT CHANGE ===== */
+        @font-face {
+            font-family: "KuruxBanna Xalxo";
+            src: url("./kurukh.ttf") format("truetype");
+            font-display: swap;
+        }
+
+        /* ============================================================
+           PROFESSIONAL COLORFUL TRIBAL THEME
+           ============================================================ */
+        :root {
+            --primary: #C1783C;
+            --primary-dark: #8B5A2B;
+            --primary-light: #D4A050;
+            --secondary: #40B5AD;
+            --secondary-dark: #2E8B85;
+            --accent: #DAA520;
+            --accent2: #E8C870;
+            --success: #7CB342;
+            --bg: #120A06;
+            --bg-card: #1C100A;
+            --bg-card-light: #2A1A10;
+            --card-border: #3D2818;
+            --text-primary: #F5EDE0;
+            --text-secondary: #D4C5B0;
+            --text-light: #A08060;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+            --shadow-hover: 0 12px 48px rgba(193, 120, 60, 0.15);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* ============================================================
+           RESET & BASE
+           ============================================================ */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Inter', -apple-system, 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .app-container {
+            max-width: 480px;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            margin: 0 auto;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.8);
+        }
+
+        /* ===== TRIBAL PATTERN OVERLAY ===== */
+        .app-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.04;
+            background-image:
+                radial-gradient(circle at 10% 20%, #D4A050 1px, transparent 1px),
+                radial-gradient(circle at 90% 80%, #D4A050 1px, transparent 1px),
+                radial-gradient(circle at 20% 90%, #D4A050 1px, transparent 1px),
+                radial-gradient(circle at 80% 10%, #D4A050 1px, transparent 1px),
+                repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(212, 160, 80, 0.05) 20px, rgba(212, 160, 80, 0.05) 21px),
+                repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(212, 160, 80, 0.05) 20px, rgba(212, 160, 80, 0.05) 21px);
+            background-size: 100% 100%, 100% 100%, 60px 60px, 60px 60px;
+        }
+
+        /* ===== ANIMATED BACKGROUND ORBS ===== */
+        .bg-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bg-orbs .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.12;
+            animation: float 14s ease-in-out infinite alternate;
+        }
+        .bg-orbs .orb:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            background: #C1783C;
+            top: -100px;
+            right: -50px;
+            animation-delay: 0s;
+        }
+        .bg-orbs .orb:nth-child(2) {
+            width: 250px;
+            height: 250px;
+            background: #40B5AD;
+            bottom: -50px;
+            left: -80px;
+            animation-delay: 5s;
+        }
+        .bg-orbs .orb:nth-child(3) {
+            width: 200px;
+            height: 200px;
+            background: #DAA520;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: 10s;
+        }
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                transform: translate(30px, -30px) scale(1.2);
+            }
+        }
+
+        /* ===== HEADER ===== */
+        .app-header {
+            padding: 8px 16px 6px 16px;
+            background: rgba(18, 10, 6, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 2px solid rgba(193, 120, 60, 0.15);
+            flex-shrink: 0;
+            z-index: 10;
+            position: relative;
+        }
+        .app-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: repeating-linear-gradient(90deg,
+                    #C1783C 0px, #C1783C 8px,
+                    transparent 8px, transparent 12px,
+                    #DAA520 12px, #DAA520 16px,
+                    transparent 16px, transparent 20px,
+                    #40B5AD 20px, #40B5AD 24px,
+                    transparent 24px, transparent 28px);
+            opacity: 0.3;
+        }
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            padding-bottom: 2px;
+        }
+        .status-bar .time {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .status-bar .icons {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+        .status-bar .icons span {
+            font-size: 12px;
+        }
+        .app-header .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2px;
+        }
+        .app-header .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .app-header .brand .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #C1783C, #DAA520);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #fff;
+            font-weight: 700;
+            box-shadow: 0 4px 16px rgba(193, 120, 60, 0.3);
+            font-family: "KuruxBanna Xalxo", sans-serif;
+            border: 1px solid rgba(212, 160, 80, 0.2);
+        }
+        .app-header .brand h1 {
+            font-size: 16px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #DAA520, #C1783C);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.3px;
+        }
+        .app-header .brand span {
+            font-size: 9px;
+            font-weight: 500;
+            color: var(--text-light);
+            -webkit-text-fill-color: var(--text-light);
+            background: none;
+            display: block;
+            margin-top: -2px;
+        }
+        .app-header .header-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .app-header .header-actions button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-secondary);
+            font-size: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .app-header .header-actions button:hover {
+            background: rgba(193, 120, 60, 0.15);
+            transform: scale(1.05);
+            color: #fff;
+            border-color: rgba(193, 120, 60, 0.2);
+        }
+        .app-header .header-actions .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #40B5AD, #2E8B85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(64, 181, 173, 0.3);
+            border: 1px solid rgba(64, 181, 173, 0.2);
+        }
+
+        /* ===== MAIN ===== */
+        .app-main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 12px 80px 12px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+            z-index: 1;
+        }
+        .app-main::-webkit-scrollbar {
+            width: 0;
+            background: transparent;
+        }
+
+        .page {
+            display: none;
+            animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        .page.active {
+            display: block;
+        }
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============================================================
+           HOME PAGE
+           ============================================================ */
+        .profile-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            padding: 4px 0;
+        }
+        .profile-section .user-info h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+        .profile-section .user-info p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .profile-section .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #C1783C, #DAA520);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 0 4px 24px rgba(193, 120, 60, 0.3);
+            font-family: "KuruxBanna Xalxo", sans-serif;
+            border: 2px solid rgba(212, 160, 80, 0.15);
+        }
+
+        .stats-grid-home {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .stat-card-home {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card-home::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #C1783C, #DAA520, #40B5AD);
+            opacity: 0.3;
+        }
+        .stat-card-home:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(193, 120, 60, 0.2);
+        }
+        .stat-card-home .stat-left .label {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+        .stat-card-home .stat-left .value {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-top: 1px;
+        }
+        .stat-card-home .stat-left .value.purple {
+            color: #DAA520;
+        }
+        .stat-card-home .stat-left .value.pink {
+            color: #40B5AD;
+        }
+        .stat-card-home .stat-icon {
+            font-size: 26px;
+            opacity: 0.6;
+        }
+
+        .section-card-home {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: var(--radius);
+            padding: 14px 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--card-border);
+            margin-bottom: 12px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .section-card-home::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #C1783C, #DAA520, #40B5AD, #C1783C);
+            background-size: 300% 100%;
+            animation: tribalLine 6s ease-in-out infinite alternate;
+            opacity: 0.2;
+        }
+        @keyframes tribalLine {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+        .section-card-home:hover {
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(193, 120, 60, 0.15);
+        }
+        .section-card-home .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .section-card-home .section-header h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .section-card-home .section-header .see-all {
+            font-size: 11px;
+            font-weight: 600;
+            color: #DAA520;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .section-card-home .section-header .see-all:hover {
+            color: #E8C870;
+            transform: translateX(2px);
+        }
+
+        .scroll-horizontal {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .scroll-horizontal::-webkit-scrollbar {
+            height: 0;
+        }
+
+        /* ===== HOME ALPHABET CHIPS WITH POPUP ===== */
+        .alphabet-chip-wrapper {
+            position: relative;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        .chip-item {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 40px;
+            padding: 6px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .chip-item:hover {
+            background: rgba(193, 120, 60, 0.12);
+            border-color: #C1783C;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .chip-item .chip-glyph {
+            font-family: "KuruxBanna Xalxo", sans-serif;
+            font-size: 16px;
+            color: #DAA520;
+        }
+
+        .chip-popup {
+            position: absolute;
+            bottom: calc(100% + 14px);
+            left: 50%;
+            transform: translateX(-50%) scale(0.8) translateY(10px);
+            background: rgba(18, 10, 6, 0.95);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(193, 120, 60, 0.2);
+            border-radius: 16px;
+            padding: 12px 18px;
+            min-width: 80px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .chip-popup::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 18px;
+            padding: 2px;
+            background: linear-gradient(135deg, #C1783C, #DAA520, #40B5AD, #C1783C);
+            background-size: 300% 300%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            animation: borderGlow 4s ease-in-out infinite alternate;
+            opacity: 0.3;
+        }
+        @keyframes borderGlow {
+            0% {
+                background-position: 0% 50%;
+                opacity: 0.2;
+            }
+            100% {
+                background-position: 100% 50%;
+                opacity: 0.6;
+            }
+        }
+        .alphabet-chip-wrapper:hover .chip-popup,
+        .alphabet-chip-wrapper.show .chip-popup {
+            opacity: 1;
+            transform: translateX(-50%) scale(1) translateY(0);
+            pointer-events: auto;
+        }
+        .chip-popup .popup-glyph {
+            font-family: "KuruxBanna Xalxo", sans-serif;
+            font-size: 40px;
+            background: linear-gradient(135deg, #FF6584, #DAA520, #40B5AD, #C1783C, #FF6584);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: popupGradient 2s ease-in-out infinite alternate;
+            line-height: 1.2;
+            filter: drop-shadow(0 0 20px rgba(193, 120, 60, 0.15));
+        }
+        @keyframes popupGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        .chip-popup .popup-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .chip-popup .popup-roman {
+            font-size: 10px;
+            color: var(--text-light);
+            font-weight: 400;
+        }
+        .chip-popup .popup-sound {
+            font-size: 10px;
+            color: rgba(193, 120, 60, 0.4);
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .chip-popup .popup-sound span {
+            animation: soundPulse 1.2s ease-in-out infinite;
+        }
+        @keyframes soundPulse {
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+        .chip-popup::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: rgba(193, 120, 60, 0.15);
+        }
+
+        /* ============================================================
+           REFERENCE GRID
+           ============================================================ */
+        .ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+            gap: 6px;
+        }
+        .ref-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: var(--radius-sm);
+            padding: 6px 2px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: var(--transition);
+            cursor: default;
+        }
+        .ref-item:hover {
+            background: rgba(193, 120, 60, 0.06);
+            border-color: rgba(193, 120, 60, 0.2);
+            transform: scale(1.05);
+        }
+        .ref-item .ref-glyph {
+            font-family: "KuruxBanna Xalxo", sans-serif;
+            font-size: 26px;
+            color: #fff;
+            line-height: 1.2;
+        }
+        .ref-item .ref-name {
+            font-size: 9px;
+            color: var(--text-light);
+            font-weight: 500;
+            margin-top: 1px;
+            text-align: center;
+        }
+
+        .category-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin: 8px 0 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .category-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(193, 120, 60, 0.15);
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .grid-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 2px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .grid-item:hover {
+            background: rgba(193, 120, 60, 0.08);
+            border-color: rgba(193, 120, 60, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        .grid-item .gi-icon {
+            font-size: 22px;
+            margin-bottom: 2px;
+        }
+        .grid-item .gi-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .font-status-inline {
+            font-size: 10px;
+            padding: 3px 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            margin-bottom: 10px;
+        }
+        .font-status-inline .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        .font-status-inline .dot.loading {
+            background: #DAA520;
+            animation: pulse 1s ease-in-out infinite;
+        }
+        .font-status-inline .dot.loaded {
+            background: #7CB342;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(0.7);
+            }
+        }
+
+        .app-footer {
+            text-align: center;
+            padding: 12px 0 4px 0;
+            font-size: 11px;
+            color: var(--text-light);
+            border-top: 1px solid rgba(193, 120, 60, 0.08);
+            margin-top: 6px;
+        }
+        .app-footer span {
+            background: linear-gradient(135deg, #DAA520, #C1783C);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        /* ============================================================
+           LEARN PAGE
+           ============================================================ */
+        .learn-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .learn-header h2 {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+        .learn-header .learn-counter {
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        .learn-header .learn-counter strong {
+            color: var(--text-primary);
+        }
+
+        .learn-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: var(--radius);
+            padding: 14px 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--card-border);
+            margin-bottom: 10px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .learn-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #C1783C, #DAA520, #40B5AD, #C1783C);
+            background-size: 300% 100%;
+            animation: tribalLine 6s ease-in-out infinite alternate;
+            opacity: 0.15;
+        }
+        .learn-card .learn-char-display {
+            font-family: "KuruxBanna Xalxo", sans-serif;
+            font-size: 150px;
+            color: #fff;
+            line-height: 1;
+            padding: 4px 0;
+            min-height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 0 0 40px rgba(193, 120, 60, 0.15);
+        }
+        .learn-card .learn-names {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 2px;
+            flex-wrap: wrap;
+        }
+        .learn-card .learn-names .name-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .learn-card .learn-names .name-item .lang-tag {
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.04);
+            padding: 0 6px;
+            border-radius: 4px;
+        }
+        .learn-card .learn-names .name-item .lang-tag.hi {
+            color: #FF6B6B;
+            background: rgba(231, 76, 60, 0.12);
+        }
+        .learn-card .learn-names .name-item .lang-tag.or {
+            color: #55EFC4;
+            background: rgba(46, 204, 113, 0.12);
+        }
+        .learn-card .learn-roman {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 500;
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+        }
+        .learn-card .learn-strokes {
+            display: inline-block;
+            margin-top: 4px;
+            font-size: 11px;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.04);
+            padding: 2px 14px;
+            border-radius: 20px;
+        }
+
+        /* ===== CANVAS WRAPPER ===== */
+        .trace-canvas-wrap {
+            position: relative;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(193, 120, 60, 0.15);
+            touch-action: none;
+            margin: 6px 0 4px 0;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 380px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .trace-canvas-wrap canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            background: #0A0806;
+            cursor: crosshair;
+            border-radius: var(--radius-sm);
+            max-height: 340px;
+        }
+        .trace-canvas-wrap .guide-line {
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: rgba(193, 120, 60, 0.08);
+            pointer-events: none;
+            transform: translateY(-50%);
+        }
+        .trace-canvas-wrap .guide-dotted {
+            position: absolute;
+            top: 25%;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: repeating-linear-gradient(90deg, rgba(193, 120, 60, 0.04) 0px, rgba(193, 120, 60, 0.04) 4px,
+                    transparent 4px, transparent 8px);
+            pointer-events: none;
+        }
+        .trace-canvas-wrap .guide-dotted-bottom {
+            position: absolute;
+            bottom: 25%;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: repeating-linear-gradient(90deg, rgba(193, 120, 60, 0.04) 0px, rgba(193, 120, 60, 0.04) 4px,
+                    transparent 4px, transparent 8px);
+            pointer-events: none;
+        }
+
+        /* ===== GUIDE CONTROLS ===== */
+        .guide-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 6px 0 4px 0;
+            padding: 4px 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 30px;
+            border: 1px solid rgba(193, 120, 60, 0.08);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .guide-controls .guide-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-right: 2px;
+        }
+        .guide-controls .guide-size-group {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            margin-right: 6px;
+        }
+        .guide-controls .guide-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 9px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+        }
+        .guide-controls .guide-btn:hover {
+            border-color: rgba(193, 120, 60, 0.2);
+            color: #fff;
+            background: rgba(193, 120, 60, 0.08);
+        }
+        .guide-controls .guide-btn.active {
+            border-color: #DAA520;
+            background: rgba(193, 120, 60, 0.15);
+            color: #fff;
+            box-shadow: 0 0 16px rgba(193, 120, 60, 0.15);
+        }
+        .guide-controls .guide-opacity-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 60px;
+            height: 4px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.08);
+            outline: none;
+            transition: var(--transition);
+        }
+        .guide-controls .guide-opacity-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #DAA520, #C1783C);
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 12px rgba(193, 120, 60, 0.2);
+        }
+        .guide-controls .guide-opacity-slider::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #DAA520, #C1783C);
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        .guide-controls .guide-opacity-label {
+            font-size: 10px;
+            color: var(--text-light);
+            font-weight: 500;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        /* ===== PEN CONTROLS ===== */
+        .pen-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin: 6px 0 4px 0;
+            padding: 4px 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 30px;
+            border: 1px solid rgba(193, 120, 60, 0.08);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .pen-controls .pen-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-right: 2px;
+        }
+        .pen-controls .pen-size-group {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            margin-right: 6px;
+        }
+        .pen-controls .pen-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+        }
+        .pen-controls .pen-btn:hover {
+            border-color: rgba(193, 120, 60, 0.2);
+            color: #fff;
+            background: rgba(193, 120, 60, 0.08);
+        }
+        .pen-controls .pen-btn.active {
+            border-color: #DAA520;
+            background: rgba(193, 120, 60, 0.15);
+            color: #fff;
+            box-shadow: 0 0 16px rgba(193, 120, 60, 0.15);
+        }
+        .pen-controls .pen-color-group {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+        }
+        .pen-controls .color-btn {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+            position: relative;
+        }
+        .pen-controls .color-btn:hover {
+            transform: scale(1.15);
+            border-color: rgba(193, 120, 60, 0.2);
+        }
+        .pen-controls .color-btn.active {
+            border-color: #DAA520;
+            box-shadow: 0 0 12px rgba(193, 120, 60, 0.15);
+            transform: scale(1.08);
+        }
+        .pen-controls .color-btn .check-mark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            color: #fff;
+            opacity: 0;
+            transition: var(--transition);
+            text-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+        }
+        .pen-controls .color-btn.active .check-mark {
+            opacity: 1;
+        }
+
+        /* ===== CONTROLS ===== */
+        .trace-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin-top: 6px;
+        }
+        .trace-controls button {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 11px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: inherit;
+            touch-action: manipulation;
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .trace-controls button:hover {
+            background: rgba(193, 120, 60, 0.08);
+            color: #fff;
+            transform: scale(1.02);
+            border-color: rgba(193, 120, 60, 0.1);
+        }
+        .trace-controls .btn-prev-learn {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-secondary);
+        }
+        .trace-controls .btn-prev-learn:hover {
+            background: rgba(193, 120, 60, 0.08);
+        }
+        .trace-controls .btn-next-learn {
+            background: linear-gradient(135deg, #C1783C, #8B5A2B);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(193, 120, 60, 0.25);
+            border: none;
+        }
+        .trace-controls .btn-next-learn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 24px rgba(193, 120, 60, 0.4);
+            background: linear-gradient(135deg, #DAA520, #C1783C);
+        }
+        .trace-controls .btn-speak-learn {
+            background: rgba(46, 204, 113, 0.08);
+            color: #7CB342;
+            border-color: rgba(124, 179, 66, 0.1);
+        }
+        .trace-controls .btn-speak-learn:hover {
+            background: rgba(124, 179, 66, 0.15);
+            color: #fff;
+        }
+        .trace-controls .btn-animate-learn {
+            background: rgba(193, 120, 60, 0.08);
+            color: #DAA520;
+            border-color: rgba(193, 120, 60, 0.1);
+        }
+        .trace-controls .btn-animate-learn:hover {
+            background: rgba(193, 120, 60, 0.15);
+            color: #fff;
+        }
+        .trace-controls .btn-clear-learn {
+            background: rgba(193, 120, 60, 0.08);
+            color: #C1783C;
+            border-color: rgba(193, 120, 60, 0.1);
+        }
+        .trace-controls .btn-clear-learn:hover {
+            background: rgba(193, 120, 60, 0.15);
+            color: #fff;
+        }
+
+        /* ============================================================
+           PRACTICE PAGE
+           ============================================================ */
+        .practice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .practice-header h2 {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+        .practice-header p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .practice-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: var(--radius);
+            padding: 14px 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--card-border);
+            margin-bottom: 10px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .practice-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #C1783C, #DAA520, #40B5AD, #C1783C);
+            background-size: 300% 100%;
+            animation: tribalLine 6s ease-in-out infinite alternate;
+            opacity: 0.15;
+        }
+        .practice-card .practice-char-ref {
+            font-family: "KuruxBanna Xalxo", sans-serif;
+            font-size: 60px;
+            text-align: center;
+            color: #fff;
+            padding: 6px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: var(--radius-sm);
+            margin-bottom: 6px;
+            border: 1px dashed rgba(193, 120, 60, 0.08);
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .practice-card .practice-char-ref .prac-sub {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            color: var(--text-light);
+            font-weight: 400;
+            margin-top: 2px;
+        }
+        .practice-card .practice-char-ref .prac-sub .prac-lang {
+            font-weight: 500;
+            margin: 0 3px;
+        }
+        .practice-card .practice-char-ref .prac-sub .prac-lang.hi {
+            color: #FF6B6B;
+        }
+        .practice-card .practice-char-ref .prac-sub .prac-lang.or {
+            color: #55EFC4;
+        }
+
+        .practice-canvas-wrap {
+            position: relative;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(193, 120, 60, 0.15);
+            touch-action: none;
+            margin: 6px 0 4px 0;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 380px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .practice-canvas-wrap canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            background: #0A0806;
+            cursor: crosshair;
+            border-radius: var(--radius-sm);
+            max-height: 340px;
+        }
+
+        .practice-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin-top: 6px;
+        }
+        .practice-controls button {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 11px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: inherit;
+            touch-action: manipulation;
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .practice-controls button:hover {
+            background: rgba(193, 120, 60, 0.08);
+            color: #fff;
+            transform: scale(1.02);
+            border-color: rgba(193, 120, 60, 0.1);
+        }
+        .practice-controls .btn-char-prac {
+            background: rgba(193, 120, 60, 0.08);
+            color: #DAA520;
+            border-color: rgba(193, 120, 60, 0.1);
+        }
+        .practice-controls .btn-char-prac:hover {
+            background: rgba(193, 120, 60, 0.15);
+            color: #fff;
+        }
+        .practice-controls .btn-clear-prac {
+            background: rgba(193, 120, 60, 0.08);
+            color: #C1783C;
+            border-color: rgba(193, 120, 60, 0.1);
+        }
+        .practice-controls .btn-clear-prac:hover {
+            background: rgba(193, 120, 60, 0.15);
+            color: #fff;
+        }
+        .practice-controls .btn-save-prac {
+            background: rgba(46, 204, 113, 0.08);
+            color: #7CB342;
+            border-color: rgba(124, 179, 66, 0.1);
+        }
+        .practice-controls .btn-save-prac:hover {
+            background: rgba(124, 179, 66, 0.15);
+            color: #fff;
+        }
+        .practice-controls .btn-prev-prac {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-secondary);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+        .practice-controls .btn-prev-prac:hover {
+            background: rgba(193, 120, 60, 0.08);
+            color: #fff;
+        }
+
+        /* ============================================================
+           PROGRESS PAGE
+           ============================================================ */
+        .progress-header {
+            margin-bottom: 12px;
+        }
+        .progress-header h2 {
+            font-size: 18px;
+            font-weight: 800;
+        }
+        .progress-header p {
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin-top: 2px;
+        }
+        .progress-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .progress-stat {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: var(--radius-sm);
+            padding: 10px 6px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--card-border);
+        }
+        .progress-stat .prog-number {
+            font-size: 22px;
+            font-weight: 800;
+            color: #DAA520;
+        }
+        .progress-stat .prog-label {
+            font-size: 9px;
+            color: var(--text-light);
+            font-weight: 500;
+            margin-top: 1px;
+        }
+
+        .progress-bar-wrap {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--card-border);
+            margin-bottom: 12px;
+        }
+        .progress-bar-wrap .prog-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        .progress-bar-wrap .prog-bar-track {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar-wrap .prog-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #C1783C, #DAA520, #40B5AD);
+            border-radius: 10px;
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 0%;
+        }
+
+        .progress-char-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 4px;
+        }
+        .progress-char-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 6px 2px;
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--card-border);
+            transition: var(--transition);
+            cursor: default;
+        }
+        .progress-char-item:hover {
+            transform: scale(1.05);
+            border-color: rgba(193, 120, 60, 0.2);
+        }
+        .progress-char-item .p-char {
+            font-family: "KuruxBanna Xalxo", sans-serif;
+            font-size: 18px;
+            color: #fff;
+            line-height: 1.2;
+        }
+        .progress-char-item .p-status {
+            font-size: 8px;
+            margin-top: 1px;
+        }
+        .progress-char-item .p-status.done {
+            color: #7CB342;
+        }
+        .progress-char-item .p-status.pending {
+            color: var(--text-light);
+        }
+        .progress-char-item.done {
+            background: rgba(124, 179, 66, 0.04);
+            border-color: rgba(124, 179, 66, 0.08);
+        }
+        .progress-char-item.pending {
+            opacity: 0.5;
+        }
+
+        /* ============================================================
+           BOTTOM NAV
+           ============================================================ */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(18, 10, 6, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 2px solid rgba(193, 120, 60, 0.08);
+            padding: 6px 10px 10px 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 20;
+            box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5);
+        }
+        .bottom-nav::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: repeating-linear-gradient(90deg,
+                    #C1783C 0px, #C1783C 6px,
+                    transparent 6px, transparent 10px,
+                    #DAA520 10px, #DAA520 14px,
+                    transparent 14px, transparent 18px,
+                    #40B5AD 18px, #40B5AD 22px,
+                    transparent 22px, transparent 26px);
+            opacity: 0.15;
+        }
+        .bottom-nav .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+            padding: 4px 10px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: 10px;
+            position: relative;
+            min-width: 48px;
+            color: var(--text-light);
+            font-family: inherit;
+        }
+        .bottom-nav .nav-item .nav-icon {
+            font-size: 18px;
+            line-height: 1;
+            transition: var(--transition);
+        }
+        .bottom-nav .nav-item .nav-label {
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            transition: var(--transition);
+        }
+        .bottom-nav .nav-item.active {
+            color: #DAA520;
+        }
+        .bottom-nav .nav-item.active .nav-icon {
+            transform: translateY(-2px) scale(1.1);
+            filter: drop-shadow(0 0 10px rgba(193, 120, 60, 0.3));
+        }
+        .bottom-nav .nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background: linear-gradient(90deg, #C1783C, #DAA520);
+            border-radius: 0 0 4px 4px;
+        }
+        .bottom-nav .nav-item:hover {
+            color: #fff;
+            background: rgba(193, 120, 60, 0.06);
+        }
+        .bottom-nav .nav-item .nav-badge {
+            position: absolute;
+            top: -2px;
+            right: 2px;
+            background: #C1783C;
+            color: #fff;
+            font-size: 7px;
+            font-weight: 700;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(18, 10, 6, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 500;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 999;
+            border: 1px solid rgba(193, 120, 60, 0.08);
+            max-width: 90%;
+            white-space: nowrap;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ===== TODAY PRACTICE CHIPS ===== */
+        .tp-char {
+            font-family: "KuruxBanna Xalxo", sans-serif;
+            font-size: 22px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(193, 120, 60, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+                border-radius: 0;
+                box-shadow: none;
+            }
+            .app-header {
+                padding: 6px 12px 4px 12px;
+            }
+            .app-main {
+                padding: 8px 10px 70px 10px;
+            }
+            .profile-section .user-info h2 {
+                font-size: 18px;
+            }
+            .stats-grid-home {
+                gap: 8px;
+            }
+            .stat-card-home {
+                padding: 10px 12px;
+            }
+            .stat-card-home .stat-left .value {
+                font-size: 20px;
+            }
+            .trace-canvas-wrap canvas,
+            .practice-canvas-wrap canvas {
+                max-height: 280px;
+            }
+            .learn-card .learn-char-display {
+                font-size: 110px;
+                min-height: 120px;
+            }
+            .learn-card .learn-names .name-item {
+                font-size: 11px;
+            }
+            .pen-controls {
+                padding: 3px 8px;
+                gap: 3px;
+            }
+            .pen-controls .pen-btn {
+                width: 24px;
+                height: 24px;
+                font-size: 9px;
+            }
+            .pen-controls .color-btn {
+                width: 20px;
+                height: 20px;
+            }
+            .guide-controls {
+                padding: 3px 8px;
+                gap: 3px;
+            }
+            .guide-controls .guide-btn {
+                width: 24px;
+                height: 24px;
+                font-size: 8px;
+            }
+            .guide-controls .guide-opacity-slider {
+                width: 50px;
+            }
+            .trace-controls button,
+            .practice-controls button {
+                padding: 5px 12px;
+                font-size: 10px;
+            }
+            .progress-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 6px;
+            }
+            .progress-stat {
+                padding: 8px 4px;
+            }
+            .progress-stat .prog-number {
+                font-size: 18px;
+            }
+            .ref-grid {
+                grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+                gap: 4px;
+            }
+            .ref-item .ref-glyph {
+                font-size: 22px;
+            }
+            .ref-item .ref-name {
+                font-size: 8px;
+            }
+            .grid-4 {
+                gap: 6px;
+            }
+            .grid-item .gi-icon {
+                font-size: 20px;
+            }
+            .grid-item .gi-label {
+                font-size: 9px;
+            }
+            .bottom-nav .nav-item {
+                min-width: 40px;
+                padding: 3px 6px;
+            }
+            .bottom-nav .nav-item .nav-icon {
+                font-size: 16px;
+            }
+            .bottom-nav .nav-item .nav-label {
+                font-size: 7px;
+            }
+            .practice-card .practice-char-ref {
+                font-size: 48px;
+                min-height: 65px;
+                padding: 4px;
+            }
+            .section-card-home {
+                padding: 10px 12px;
+                margin-bottom: 10px;
+            }
+            .section-card-home .section-header h3 {
+                font-size: 13px;
+            }
+            .toast {
+                font-size: 11px;
+                padding: 6px 14px;
+                bottom: 70px;
+            }
+            .chip-popup .popup-glyph {
+                font-size: 32px;
+            }
+            .chip-popup {
+                padding: 8px 12px;
+                min-width: 60px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .stats-grid-home {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+            .grid-4 {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 4px;
+            }
+            .grid-item {
+                padding: 6px 2px;
+            }
+            .grid-item .gi-icon {
+                font-size: 18px;
+            }
+            .trace-canvas-wrap canvas,
+            .practice-canvas-wrap canvas {
+                max-height: 220px;
+            }
+            .learn-card .learn-char-display {
+                font-size: 90px;
+                min-height: 100px;
+            }
+            .pen-controls .pen-btn {
+                width: 20px;
+                height: 20px;
+                font-size: 8px;
+            }
+            .pen-controls .color-btn {
+                width: 18px;
+                height: 18px;
+            }
+            .guide-controls .guide-btn {
+                width: 20px;
+                height: 20px;
+                font-size: 7px;
+            }
+            .guide-controls .guide-opacity-slider {
+                width: 40px;
+            }
+            .trace-controls button,
+            .practice-controls button {
+                padding: 4px 10px;
+                font-size: 9px;
+            }
+            .bottom-nav .nav-item {
+                min-width: 34px;
+                padding: 2px 4px;
+            }
+            .bottom-nav .nav-item .nav-label {
+                font-size: 6px;
+            }
+            .bottom-nav .nav-item .nav-icon {
+                font-size: 14px;
+            }
+            .bottom-nav .nav-item .nav-badge {
+                width: 12px;
+                height: 12px;
+                font-size: 6px;
+            }
+            .progress-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 4px;
+            }
+            .progress-stat .prog-number {
+                font-size: 16px;
+            }
+            .ref-grid {
+                grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+                gap: 3px;
+            }
+            .ref-item .ref-glyph {
+                font-size: 18px;
+            }
+            .ref-item .ref-name {
+                font-size: 7px;
+            }
+            .practice-card .practice-char-ref {
+                font-size: 40px;
+                min-height: 55px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container" id="app">
+
+        <!-- ===== ANIMATED BACKGROUND ORBS ===== -->
+        <div class="bg-orbs">
+            <div class="orb"></div>
+            <div class="orb"></div>
+            <div class="orb"></div>
+        </div>
+
+        <!-- ===== HEADER ===== -->
+        <header class="app-header">
+            <div class="status-bar">
+                <span class="time" id="statusTime">9:41</span>
+                <div class="icons">
+                    <span>📶</span>
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+
+            <div class="top-row">
+                <div class="brand">
+                    <div class="logo-icon">k</div>
+                    <div>
+                        <h1>कुँड़ुख़ बन्ना</h1>
+                        <span>✍️ लेखन अभ्यास</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button id="themeToggle" title="थीम बदलें">🌓</button>
+                    <div class="avatar">र</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ===== MAIN ===== -->
+        <main class="app-main" id="appMain">
+
+            <!-- ============================================================
+            HOME PAGE
+            ============================================================ -->
+            <div class="page active" id="page-home">
+
+                <div class="font-status-inline" id="fontStatus">
+                    <span class="dot loading" id="fontDot"></span>
+                    <span id="fontStatusText">फ़ॉन्ट लोड हो रहा...</span>
+                </div>
+
+                <div class="profile-section">
+                    <div class="user-info">
+                        <h2>Welcome to Kurukh Banna</h2>
+                        <p>Roshan Toppo · Learner</p>
+                    </div>
+                    <div class="user-avatar">R</div>
+                </div>
+
+                <div class="stats-grid-home">
+                    <div class="stat-card-home">
+                        <div class="stat-left">
+                            <span class="label">Learned</span>
+                            <span class="value purple" id="homeLearned">0</span>
+                        </div>
+                        <div class="stat-icon">📖</div>
+                    </div>
+                    <div class="stat-card-home">
+                        <div class="stat-left">
+                            <span class="label">Practice</span>
+                            <span class="value pink" id="homePractice">0m</span>
+                        </div>
+                        <div class="stat-icon">⏱️</div>
+                    </div>
+                </div>
+
+                <!-- Alphabet Section with POPUP -->
+                <div class="section-card-home">
+                    <div class="section-header">
+                        <h3>🔤 Kurukh Alphabet</h3>
+                        <span class="see-all" data-page="learn">सभी देखें →</span>
+                    </div>
+                    <div class="scroll-horizontal" id="alphabetScrollHome">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <div class="section-card-home">
+                    <div class="section-header">
+                        <h3>📚 पूरी कुँड़ुख़ लिपि</h3>
+                        <span style="font-size:11px;color:var(--text-light);">सीखने के लिए संदर्भ</span>
+                    </div>
+
+                    <div class="category-label">🔊 स्वर (Vowels)</div>
+                    <div class="ref-grid" id="vowelGrid"></div>
+
+                    <div class="category-label" style="margin-top:10px;">🔤 व्यंजन (Consonants)</div>
+                    <div class="ref-grid" id="consonantGrid"></div>
+
+                    <div class="category-label" style="margin-top:10px;">🔢 अंक (Numbers)</div>
+                    <div style="font-size:12px;color:var(--text-light);padding:8px 0;text-align:center;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);border:1px dashed rgba(193,120,60,0.08);">
+                        संख्याएँ जल्द ही जोड़ी जाएँगी
+                    </div>
+                </div>
+
+                <div class="section-card-home">
+                    <div class="section-header">
+                        <h3>📚 Learn</h3>
+                        <span class="see-all" data-page="learn">शुरू करें →</span>
+                    </div>
+                    <div class="grid-4">
+                        <div class="grid-item" data-page="learn">
+                            <span class="gi-icon">✍️</span>
+                            <span class="gi-label">Trace</span>
+                        </div>
+                        <div class="grid-item" data-page="practice">
+                            <span class="gi-icon">🖐️</span>
+                            <span class="gi-label">Write</span>
+                        </div>
+                        <div class="grid-item" data-page="learn">
+                            <span class="gi-icon">🔊</span>
+                            <span class="gi-label">Speak</span>
+                        </div>
+                        <div class="grid-item" data-page="learn">
+                            <span class="gi-icon">🎬</span>
+                            <span class="gi-label">Animate</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-card-home">
+                    <div class="section-header">
+                        <h3>📊 My Progress</h3>
+                        <span class="see-all" data-page="progress">देखें →</span>
+                    </div>
+                    <div class="scroll-horizontal">
+                        <div class="chip-item" data-page="progress">📈 Overview</div>
+                        <div class="chip-item" data-page="progress">🏆 Leaderboard</div>
+                        <div class="chip-item" data-page="progress">⚙️ Settings</div>
+                    </div>
+                </div>
+
+                <div class="section-card-home" style="margin-bottom:0;">
+                    <div class="section-header">
+                        <h3>📋 आज का अभ्यास</h3>
+                        <span class="see-all" data-page="practice">अभ्यास करें →</span>
+                    </div>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;" id="todayCharsHome"></div>
+                </div>
+
+                <div class="app-footer">
+                    Developed by <span>Roshan Toppo</span> <span style="color:var(--text-light);">x</span> <span>Kurukh Pride</span>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            LEARN PAGE — Tracing with ANIMATION
+            ============================================================ -->
+            <div class="page" id="page-learn">
+                <div class="learn-header">
+                    <h2>📖 ट्रेस करें</h2>
+                    <div class="learn-counter"><strong id="learnIndexDisplay">1</strong> / <span id="learnTotalDisplay">0</span></div>
+                </div>
+
+                <div class="learn-card">
+                    <div class="learn-char-display" id="learnCharDisplay">k</div>
+
+                    <div class="learn-names" id="learnNames">
+                        <span class="name-item"><span class="lang-tag hi">हिंदी</span> <span id="learnNameHindi">क</span></span>
+                        <span class="name-item"><span class="lang-tag or">ଓଡ଼ିଆ</span> <span id="learnNameOdia">କ</span></span>
+                    </div>
+
+                    <div class="learn-roman" id="learnRoman">k</div>
+                    <div class="learn-strokes" id="learnStrokes">3 स्ट्रोक</div>
+
+                    <div class="trace-canvas-wrap">
+                        <canvas id="learnCanvas" width="400" height="400"></canvas>
+                        <div class="guide-line"></div>
+                        <div class="guide-dotted"></div>
+                        <div class="guide-dotted-bottom"></div>
+                    </div>
+
+                    <!-- GUIDE CONTROLS -->
+                    <div class="guide-controls">
+                        <span class="guide-label">📏 Guide</span>
+                        <div class="guide-size-group">
+                            <button class="guide-btn" data-size="120">S</button>
+                            <button class="guide-btn active" data-size="200">M</button>
+                            <button class="guide-btn" data-size="280">L</button>
+                            <button class="guide-btn" data-size="340">XL</button>
+                        </div>
+                        <input type="range" class="guide-opacity-slider" id="guideOpacitySlider" min="5" max="50" value="12" />
+                        <span class="guide-opacity-label" id="guideOpacityLabel">12%</span>
+                    </div>
+
+                    <!-- PEN CONTROLS -->
+                    <div class="pen-controls">
+                        <span class="pen-label">🖊️</span>
+                        <div class="pen-size-group">
+                            <button class="pen-btn" data-size="2">2</button>
+                            <button class="pen-btn active" data-size="6">4</button>
+                            <button class="pen-btn" data-size="10">8</button>
+                            <button class="pen-btn" data-size="16">16</button>
+                        </div>
+                        <div class="pen-color-group">
+                            <button class="color-btn active" data-color="#C1783C" style="background:#C1783C;"><span class="check-mark">✓</span></button>
+                            <button class="color-btn" data-color="#40B5AD" style="background:#40B5AD;"><span class="check-mark">✓</span></button>
+                            <button class="color-btn" data-color="#DAA520" style="background:#DAA520;"><span class="check-mark">✓</span></button>
+                            <button class="color-btn" data-color="#E74C3C" style="background:#E74C3C;"><span class="check-mark">✓</span></button>
+                            <button class="color-btn" data-color="#2ECC71" style="background:#2ECC71;"><span class="check-mark">✓</span></button>
+                            <button class="color-btn" data-color="#FFFFFF" style="background:#FFFFFF;border-color:rgba(255,255,255,0.3);"><span class="check-mark" style="color:#000;">✓</span></button>
+                        </div>
+                    </div>
+
+                    <div class="trace-controls">
+                        <button class="btn-prev-learn" id="learnPrev">⬅ पिछला</button>
+                        <button class="btn-clear-learn" id="learnClear">🗑️ साफ़</button>
+                        <button class="btn-speak-learn" id="learnSpeak">🔊 सुनें</button>
+                        <button class="btn-animate-learn" id="learnAnimate">▶️ लिखते हुए देखें</button>
+                        <button class="btn-next-learn" id="learnNext">अगला ➡</button>
+                    </div>
+                    <div style="text-align:center;margin-top:4px;font-size:11px;color:var(--text-light);">
+                        👆 फिंगर से ट्रेस करें · गाइड का साइज़ और ओपैसिटी बदलें
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            PRACTICE PAGE
+            ============================================================ -->
+            <div class="page" id="page-practice">
+                <div class="practice-header">
+                    <h2>✍️ हैंडराइटिंग</h2>
+                    <p style="font-size:12px;color:var(--text-secondary);margin-top:2px;">फिंगर से लिखकर अभ्यास करें</p>
+                </div>
+
+                <div class="practice-card">
+                    <div class="practice-char-ref" id="practiceCharRef">
+                        <span style="font-family:'KuruxBanna Xalxo';font-size:60px;">k</span>
+                        <div class="prac-sub">
+                            <span class="prac-lang hi">क</span>
+                            <span style="color:var(--text-light);margin:0 3px;">·</span>
+                            <span class="prac-lang or">କ</span>
+                            <span style="color:var(--text-light);margin:0 3px;">·</span>
+                            <span style="color:var(--text-light);">k</span>
+                        </div>
+                    </div>
+
+                    <div class="practice-canvas-wrap">
+                        <canvas id="practiceCanvas" width="400" height="400"></canvas>
+                        <div style="position:absolute;top:50%;left:10%;right:10%;height:2px;background:rgba(193,120,60,0.06);pointer-events:none;transform:translateY(-50%);"></div>
+                        <div style="position:absolute;top:25%;left:10%;right:10%;height:1px;background:repeating-linear-gradient(90deg,rgba(193,120,60,0.03) 0px,rgba(193,120,60,0.03) 4px,transparent 4px,transparent 8px);pointer-events:none;"></div>
+                        <div style="position:absolute;bottom:25%;left:10%;right:10%;height:1px;background:repeating-linear-gradient(90deg,rgba(193,120,60,0.03) 0px,rgba(193,120,60,0.03) 4px,transparent 4px,transparent 8px);pointer-events:none;"></div>
+                    </div>
+
+                    <div class="pen-controls">
+                        <span class="pen-label">🖊️</span>
+                        <div class="pen-size-group">
+                            <button class="pen-btn" data-size="2">2</button>
+                            <button class="pen-btn active" data-size="6">4</button>
+                            <button class="pen-btn" data-size="10">8</button>
+                            <button class="pen-btn" data-size="16">16</button>
+                        </div>
+                        <div class="pen-color-group">
+                            <button class="color-btn active" data-color="#40B5AD" style="background:#40B5AD;"><span class="check-mark">✓</span></button>
+                            <button class="color-btn" data-color="#C1783C" style="background:#C1783C;"><span class="check-mark">✓</span></button>
+                            <button class="color-btn" data-color="#DAA520" style="background:#DAA520;"><span class="check-mark">✓</span></button>
+                            <button class="color-btn" data-color="#E74C3C" style="background:#E74C3C;"><span class="check-mark">✓</span></button>
+                            <button class="color-btn" data-color="#2ECC71" style="background:#2ECC71;"><span class="check-mark">✓</span></button>
+                            <button class="color-btn" data-color="#FFFFFF" style="background:#FFFFFF;border-color:rgba(255,255,255,0.3);"><span class="check-mark" style="color:#000;">✓</span></button>
+                        </div>
+                    </div>
+
+                    <div class="practice-controls">
+                        <button class="btn-prev-prac" id="practicePrev">⬅ पिछला</button>
+                        <button class="btn-char-prac" id="practiceNextChar">अगला ➡</button>
+                        <button class="btn-clear-prac" id="practiceClear">🗑️ साफ़</button>
+                        <button class="btn-save-prac" id="practiceSave">💾 PNG</button>
+                        <button class="btn-save-prac" id="practiceSavePDF" style="background:rgba(193,120,60,0.08);color:#DAA520;border-color:rgba(193,120,60,0.1);">📄 PDF</button>
+                    </div>
+                    <div style="text-align:center;margin-top:6px;font-size:11px;color:var(--text-light);">
+                        👆 फिंगर से <span style="font-family:'KuruxBanna Xalxo';">कुँड़ुख़</span> में लिखें — स्वतः सेव
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            PROGRESS PAGE
+            ============================================================ -->
+            <div class="page" id="page-progress">
+                <div class="progress-header">
+                    <h2>📊 प्रगति</h2>
+                    <p style="font-size:12px;color:var(--text-secondary);margin-top:2px;">आपकी सीखने की यात्रा</p>
+                </div>
+
+                <div class="progress-grid">
+                    <div class="progress-stat">
+                        <div class="prog-number" id="progLearned">0</div>
+                        <div class="prog-label">अक्षर सीखे</div>
+                    </div>
+                    <div class="progress-stat">
+                        <div class="prog-number" id="progTotal">0</div>
+                        <div class="prog-label">कुल अक्षर</div>
+                    </div>
+                    <div class="progress-stat">
+                        <div class="prog-number" id="progPercent">0%</div>
+                        <div class="prog-label">प्रगति</div>
+                    </div>
+                </div>
+
+                <div class="progress-bar-wrap">
+                    <div class="prog-bar-label">
+                        <span>कुल प्रगति</span>
+                        <span id="progressPercentLabel">0%</span>
+                    </div>
+                    <div class="prog-bar-track">
+                        <div class="prog-bar-fill" id="progressFill" style="width:0%"></div>
+                    </div>
+                </div>
+
+                <div class="section-card-home">
+                    <div class="section-header">
+                        <h3>📚 सभी अक्षर</h3>
+                        <span style="font-size:10px;color:var(--text-light);">✅ सीखा · ⬜ बाकी</span>
+                    </div>
+                    <div class="progress-char-grid" id="progressCharGrid"></div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- ===== BOTTOM NAV ===== -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-page="home">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">होम</span>
+            </button>
+            <button class="nav-item" data-page="learn">
+                <span class="nav-icon">📖</span>
+                <span class="nav-label">सीखें</span>
+            </button>
+            <button class="nav-item" data-page="practice">
+                <span class="nav-icon">✍️</span>
+                <span class="nav-label">अभ्यास</span>
+            </button>
+            <button class="nav-item" data-page="progress">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">प्रगति</span>
+                <span class="nav-badge" id="progBadge">0</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast">✨ Message</div>
+
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ============================================================
+            // CHARACTER DATA
+            // ============================================================
+            const charData = [
+                { glyph: "A", name: "अ", nameOdia: "ଅ", roman: "A", strokes: 2, category: "vowel" },
+                { glyph: "Aa", name: "आ", nameOdia: "ଆ", roman: "Aa", strokes: 3, category: "vowel" },
+                { glyph: "q", name: "इ", nameOdia: "ଇ", roman: "q", strokes: 2, category: "vowel" },
+                { glyph: "Q", name: "ई", nameOdia: "ଈ", roman: "Q", strokes: 3, category: "vowel" },
+                { glyph: "w", name: "उ", nameOdia: "ଉ", roman: "w", strokes: 2, category: "vowel" },
+                { glyph: "W", name: "ऊ", nameOdia: "ଊ", roman: "W", strokes: 3, category: "vowel" },
+                { glyph: "V", name: "ए", nameOdia: "ଏ", roman: "V", strokes: 3, category: "vowel" },
+                { glyph: "Y", name: "ऐ", nameOdia: "ଐ", roman: "Y", strokes: 3, category: "vowel" },
+                { glyph: "Ao", name: "ओ", nameOdia: "ଓ", roman: "Ao", strokes: 3, category: "vowel" },
+                { glyph: "AO", name: "औ", nameOdia: "ଔ", roman: "AO", strokes: 3, category: "vowel" },
+                { glyph: "k", name: "क", nameOdia: "କ", roman: "k", strokes: 3, category: "consonant" },
+                { glyph: "K", name: "ख", nameOdia: "ଖ", roman: "K", strokes: 3, category: "consonant" },
+                { glyph: "g", name: "ग", nameOdia: "ଗ", roman: "g", strokes: 3, category: "consonant" },
+                { glyph: "G", name: "घ", nameOdia: "ଘ", roman: "G", strokes: 3, category: "consonant" },
+                { glyph: "<", name: "ङ", nameOdia: "ଙ", roman: "<", strokes: 2, category: "consonant" },
+                { glyph: "c", name: "च", nameOdia: "ଚ", roman: "c", strokes: 3, category: "consonant" },
+                { glyph: "C", name: "छ", nameOdia: "ଛ", roman: "C", strokes: 3, category: "consonant" },
+                { glyph: "j", name: "ज", nameOdia: "ଜ", roman: "j", strokes: 3, category: "consonant" },
+                { glyph: "J", name: "झ", nameOdia: "ଝ", roman: "J", strokes: 3, category: "consonant" },
+                { glyph: "^", name: "ञ", nameOdia: "ଞ", roman: "^", strokes: 2, category: "consonant" },
+                { glyph: "t", name: "ट", nameOdia: "ଟ", roman: "t", strokes: 3, category: "consonant" },
+                { glyph: "T", name: "ठ", nameOdia: "ଠ", roman: "T", strokes: 3, category: "consonant" },
+                { glyph: "L", name: "ड", nameOdia: "ଡ", roman: "L", strokes: 3, category: "consonant" },
+                { glyph: "X", name: "ढ", nameOdia: "ଢ", roman: "X", strokes: 3, category: "consonant" },
+                { glyph: "F", name: "ण", nameOdia: "ଣ", roman: "F", strokes: 2, category: "consonant" },
+                { glyph: "z", name: "त", nameOdia: "ତ", roman: "z", strokes: 3, category: "consonant" },
+                { glyph: "Z", name: "थ", nameOdia: "ଥ", roman: "Z", strokes: 3, category: "consonant" },
+                { glyph: "d", name: "द", nameOdia: "ଦ", roman: "d", strokes: 3, category: "consonant" },
+                { glyph: "D", name: "ध", nameOdia: "ଧ", roman: "D", strokes: 3, category: "consonant" },
+                { glyph: "n", name: "न", nameOdia: "ନ", roman: "n", strokes: 2, category: "consonant" },
+                { glyph: "p", name: "प", nameOdia: "ପ", roman: "p", strokes: 3, category: "consonant" },
+                { glyph: "f", name: "फ", nameOdia: "ଫ", roman: "f", strokes: 3, category: "consonant" },
+                { glyph: "b", name: "ब", nameOdia: "ବ", roman: "b", strokes: 3, category: "consonant" },
+                { glyph: "B", name: "भ", nameOdia: "ଭ", roman: "B", strokes: 3, category: "consonant" },
+                { glyph: "m", name: "म", nameOdia: "ମ", roman: "m", strokes: 3, category: "consonant" },
+                { glyph: "y", name: "य", nameOdia: "ୟ", roman: "y", strokes: 3, category: "consonant" },
+                { glyph: "r", name: "र", nameOdia: "ର", roman: "r", strokes: 2, category: "consonant" },
+                { glyph: "l", name: "ल", nameOdia: "ଲ", roman: "l", strokes: 3, category: "consonant" },
+                { glyph: "v", name: "व", nameOdia: "ୱ", roman: "v", strokes: 3, category: "consonant" },
+                { glyph: "S", name: "श", nameOdia: "ଶ", roman: "S", strokes: 3, category: "consonant" },
+                { glyph: "{", name: "ष", nameOdia: "ଷ", roman: "{", strokes: 3, category: "consonant" },
+                { glyph: "s", name: "स", nameOdia: "ସ", roman: "s", strokes: 3, category: "consonant" },
+                { glyph: "h", name: "ह", nameOdia: "ହ", roman: "h", strokes: 3, category: "consonant" },
+                { glyph: "H", name: "क्ष", nameOdia: "କ୍ଷ", roman: "H", strokes: 4, category: "consonant" },
+                { glyph: "}", name: "त्र", nameOdia: "ତ୍ର", roman: "}", strokes: 3, category: "consonant" },
+                { glyph: ">", name: "ज्ञ", nameOdia: "ଜ୍ଞ", roman: ">", strokes: 4, category: "consonant" },
+                { glyph: "P", name: "ड़", nameOdia: "ଡ଼", roman: "P", strokes: 3, category: "consonant" },
+                { glyph: "R", name: "ढ़", nameOdia: "ଢ଼", roman: "R", strokes: 3, category: "consonant" },
+                { glyph: "x", name: "ख़", nameOdia: "ଖ଼", roman: "x", strokes: 3, category: "consonant" }
+            ];
+
+            const vowels = charData.filter(c => c.category === 'vowel');
+            const consonants = charData.filter(c => c.category === 'consonant');
+
+            // ============================================================
+            // STATE
+            // ============================================================
+            let currentLearnIndex = 0;
+            let isDrawing = false;
+            let lastX = 0,
+                lastY = 0;
+            let learnedChars = new Set();
+            let practiceCharIndex = 0;
+            let isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            let isAnimating = false;
+            let animationFrame = null;
+            let currentPenSize = 6;
+            let currentPenColor = '#C1783C';
+            let guideFontSize = 200;
+            let guideOpacity = 0.12;
+
+            // ============================================================
+            // DOM REFS
+            // ============================================================
+            const pages = {
+                home: document.getElementById('page-home'),
+                learn: document.getElementById('page-learn'),
+                practice: document.getElementById('page-practice'),
+                progress: document.getElementById('page-progress'),
+            };
+
+            const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+            const seeAllLinks = document.querySelectorAll('.see-all');
+            const gridItems = document.querySelectorAll('.grid-item');
+
+            // Learn
+            const learnCharDisplay = document.getElementById('learnCharDisplay');
+            const learnNameHindi = document.getElementById('learnNameHindi');
+            const learnNameOdia = document.getElementById('learnNameOdia');
+            const learnRoman = document.getElementById('learnRoman');
+            const learnStrokes = document.getElementById('learnStrokes');
+            const learnIndexDisplay = document.getElementById('learnIndexDisplay');
+            const learnTotalDisplay = document.getElementById('learnTotalDisplay');
+
+            const learnCanvas = document.getElementById('learnCanvas');
+            const learnCtx = learnCanvas.getContext('2d');
+
+            // Practice
+            const practiceCanvas = document.getElementById('practiceCanvas');
+            const practiceCtx = practiceCanvas.getContext('2d');
+            const practiceCharRef = document.getElementById('practiceCharRef');
+
+            // Progress
+            const progressFill = document.getElementById('progressFill');
+            const progressPercentLabel = document.getElementById('progressPercentLabel');
+            const progressCharGrid = document.getElementById('progressCharGrid');
+            const progLearned = document.getElementById('progLearned');
+            const progTotal = document.getElementById('progTotal');
+            const progPercent = document.getElementById('progPercent');
+            const progBadge = document.getElementById('progBadge');
+
+            // Home
+            const homeLearned = document.getElementById('homeLearned');
+            const homePractice = document.getElementById('homePractice');
+            const alphabetScrollHome = document.getElementById('alphabetScrollHome');
+            const todayCharsHome = document.getElementById('todayCharsHome');
+            const vowelGrid = document.getElementById('vowelGrid');
+            const consonantGrid = document.getElementById('consonantGrid');
+
+            // Pen Controls
+            const penSizeBtns = document.querySelectorAll('.pen-size-group .pen-btn');
+            const penColorBtns = document.querySelectorAll('.pen-color-group .color-btn');
+
+            // Guide Controls
+            const guideSizeBtns = document.querySelectorAll('.guide-size-group .guide-btn');
+            const guideOpacitySlider = document.getElementById('guideOpacitySlider');
+            const guideOpacityLabel = document.getElementById('guideOpacityLabel');
+
+            const toast = document.getElementById('toast');
+            const fontDot = document.getElementById('fontDot');
+            const fontStatusText = document.getElementById('fontStatusText');
+
+            let practiceElapsed = 0;
+            let practiceStartTime = Date.now();
+
+            // ============================================================
+            // STATUS BAR TIME
+            // ============================================================
+            function updateStatusTime() {
+                const now = new Date();
+                const h = String(now.getHours()).padStart(2, '0');
+                const m = String(now.getMinutes()).padStart(2, '0');
+                document.getElementById('statusTime').textContent = h + ':' + m;
+            }
+            updateStatusTime();
+            setInterval(updateStatusTime, 30000);
+
+            // ============================================================
+            // FONT LOADING
+            // ============================================================
+            function checkFontStatus() {
+                if (document.fonts) {
+                    document.fonts.load('40px "KuruxBanna Xalxo"')
+                        .then(() => {
+                            fontDot.className = 'dot loaded';
+                            fontStatusText.textContent = '✅ कुँड़ुख़ फ़ॉन्ट लोड हो गया';
+                            showToast('🎉 कुँड़ुख़ फ़ॉन्ट तैयार है!');
+                        })
+                        .catch(() => {
+                            fontDot.className = 'dot loaded';
+                            fontStatusText.textContent = '✅ फ़ॉन्ट लोड हो गया';
+                        });
+                } else {
+                    setTimeout(() => {
+                        fontDot.className = 'dot loaded';
+                        fontStatusText.textContent = '✅ फ़ॉन्ट तैयार है';
+                    }, 1500);
+                }
+            }
+
+            // ============================================================
+            // PEN CONTROLS
+            // ============================================================
+            function initPenControls() {
+                penSizeBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const parent = this.closest('.pen-size-group');
+                        parent.querySelectorAll('.pen-btn').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        currentPenSize = parseInt(this.dataset.size, 10);
+                        showToast('🖊️ साइज़: ' + currentPenSize);
+                    });
+                });
+
+                penColorBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const parent = this.closest('.pen-color-group');
+                        parent.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        currentPenColor = this.dataset.color;
+                        showToast('🎨 रंग बदला');
+                    });
+                });
+            }
+
+            // ============================================================
+            // GUIDE CONTROLS
+            // ============================================================
+            function initGuideControls() {
+                guideSizeBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const parent = this.closest('.guide-size-group');
+                        parent.querySelectorAll('.guide-btn').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        guideFontSize = parseInt(this.dataset.size, 10);
+                        showToast('📏 गाइड साइज़: ' + guideFontSize);
+                        clearLearnCanvas();
+                    });
+                });
+
+                guideOpacitySlider.addEventListener('input', function() {
+                    guideOpacity = parseInt(this.value, 10) / 100;
+                    guideOpacityLabel.textContent = Math.round(guideOpacity * 100) + '%';
+                    clearLearnCanvas();
+                });
+            }
+
+            // ============================================================
+            // LEARN CANVAS
+            // ============================================================
+            function initLearnCanvas() {
+                learnCanvas.width = 400;
+                learnCanvas.height = 400;
+                learnCanvas.style.width = '100%';
+                learnCanvas.style.height = 'auto';
+                learnCtx.scale(1, 1);
+                clearLearnCanvas();
+            }
+
+            function clearLearnCanvas() {
+                learnCtx.clearRect(0, 0, 400, 400);
+                // Subtle grid
+                learnCtx.strokeStyle = 'rgba(193,120,60,0.04)';
+                learnCtx.lineWidth = 0.5;
+                for (let i = 0; i <= 400; i += 40) {
+                    learnCtx.beginPath();
+                    learnCtx.moveTo(i, 0);
+                    learnCtx.lineTo(i, 400);
+                    learnCtx.stroke();
+                    learnCtx.beginPath();
+                    learnCtx.moveTo(0, i);
+                    learnCtx.lineTo(400, i);
+                    learnCtx.stroke();
+                }
+                learnCtx.strokeStyle = 'rgba(193,120,60,0.06)';
+                learnCtx.lineWidth = 1;
+                learnCtx.setLineDash([6, 6]);
+                learnCtx.beginPath();
+                learnCtx.moveTo(40, 200);
+                learnCtx.lineTo(360, 200);
+                learnCtx.stroke();
+                learnCtx.setLineDash([]);
+                drawGuideChar();
+            }
+
+            function drawGuideChar() {
+                const glyph = charData[currentLearnIndex].glyph;
+                learnCtx.save();
+                learnCtx.font = guideFontSize + 'px "KuruxBanna Xalxo"';
+                learnCtx.textAlign = 'center';
+                learnCtx.textBaseline = 'middle';
+                const alpha = Math.min(guideOpacity, 0.5);
+                learnCtx.fillStyle = 'rgba(193,120,60,' + alpha + ')';
+                learnCtx.shadowColor = 'rgba(193,120,60,' + (alpha * 0.3) + ')';
+                learnCtx.shadowBlur = 20;
+                learnCtx.fillText(glyph, 200, 200);
+                learnCtx.shadowBlur = 0;
+                learnCtx.strokeStyle = 'rgba(193,120,60,' + (alpha * 0.3) + ')';
+                learnCtx.lineWidth = 1.5;
+                learnCtx.strokeText(glyph, 200, 200);
+                learnCtx.restore();
+            }
+
+            function getLearnPos(e) {
+                const rect = learnCanvas.getBoundingClientRect();
+                const scaleX = learnCanvas.width / rect.width;
+                const scaleY = learnCanvas.height / rect.height;
+                let clientX, clientY;
+                if (e.touches) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                    e.preventDefault();
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
+                return {
+                    x: (clientX - rect.left) * scaleX,
+                    y: (clientY - rect.top) * scaleY
+                };
+            }
+
+            let learnDrawing = false;
+            let learnLastX = 0,
+                learnLastY = 0;
+
+            function startLearnDraw(e) {
+                e.preventDefault();
+                if (isAnimating) return;
+                learnDrawing = true;
+                const pos = getLearnPos(e);
+                learnLastX = pos.x;
+                learnLastY = pos.y;
+                learnCtx.beginPath();
+                learnCtx.arc(learnLastX, learnLastY, currentPenSize / 3, 0, Math.PI * 2);
+                learnCtx.fillStyle = currentPenColor;
+                learnCtx.fill();
+                markLearned(currentLearnIndex);
+            }
+
+            function drawLearn(e) {
+                e.preventDefault();
+                if (!learnDrawing || isAnimating) return;
+                const pos = getLearnPos(e);
+                learnCtx.beginPath();
+                learnCtx.moveTo(learnLastX, learnLastY);
+                learnCtx.lineTo(pos.x, pos.y);
+                learnCtx.strokeStyle = currentPenColor;
+                learnCtx.lineWidth = currentPenSize;
+                learnCtx.lineCap = 'round';
+                learnCtx.lineJoin = 'round';
+                learnCtx.stroke();
+                learnLastX = pos.x;
+                learnLastY = pos.y;
+            }
+
+            function endLearnDraw(e) {
+                e.preventDefault();
+                learnDrawing = false;
+            }
+
+            learnCanvas.addEventListener('mousedown', startLearnDraw);
+            learnCanvas.addEventListener('mousemove', drawLearn);
+            learnCanvas.addEventListener('mouseup', endLearnDraw);
+            learnCanvas.addEventListener('mouseleave', endLearnDraw);
+            learnCanvas.addEventListener('touchstart', startLearnDraw, { passive: false });
+            learnCanvas.addEventListener('touchmove', drawLearn, { passive: false });
+            learnCanvas.addEventListener('touchend', endLearnDraw, { passive: false });
+
+            // ============================================================
+            // WRITING ANIMATION — shows pen movement left to right
+            // ============================================================
+            function animateStrokeOnLearn() {
+                if (isAnimating) {
+                    cancelAnimationFrame(animationFrame);
+                    isAnimating = false;
+                }
+
+                isAnimating = true;
+                const glyph = charData[currentLearnIndex].glyph;
+                let progress = 0;
+                const duration = 2000;
+                const startTime = performance.now();
+
+                // We'll draw the character with a left-to-right wipe
+                // and a pen tip moving along the right edge of the wipe
+
+                function step(time) {
+                    const elapsed = time - startTime;
+                    progress = Math.min(elapsed / duration, 1);
+                    const eased = progress; // linear for smooth pen movement
+
+                    // Clear canvas
+                    learnCtx.clearRect(0, 0, 400, 400);
+
+                    // Draw background grid (subtle)
+                    learnCtx.strokeStyle = 'rgba(193,120,60,0.04)';
+                    learnCtx.lineWidth = 0.5;
+                    for (let i = 0; i <= 400; i += 40) {
+                        learnCtx.beginPath();
+                        learnCtx.moveTo(i, 0);
+                        learnCtx.lineTo(i, 400);
+                        learnCtx.stroke();
+                        learnCtx.beginPath();
+                        learnCtx.moveTo(0, i);
+                        learnCtx.lineTo(400, i);
+                        learnCtx.stroke();
+                    }
+
+                    // Draw the character with a clip rectangle moving left to right
+                    learnCtx.save();
+                    const clipX = eased * 400;
+                    learnCtx.beginPath();
+                    learnCtx.rect(0, 0, clipX, 400);
+                    learnCtx.clip();
+
+                    // Draw the character in full color
+                    learnCtx.font = guideFontSize + 'px "KuruxBanna Xalxo"';
+                    learnCtx.textAlign = 'center';
+                    learnCtx.textBaseline = 'middle';
+                    const grad = learnCtx.createLinearGradient(0, 0, 0, 400);
+                    grad.addColorStop(0, '#C1783C');
+                    grad.addColorStop(0.5, '#DAA520');
+                    grad.addColorStop(1, '#C1783C');
+                    learnCtx.fillStyle = grad;
+                    learnCtx.shadowColor = 'rgba(193,120,60,0.2)';
+                    learnCtx.shadowBlur = 20;
+                    learnCtx.fillText(glyph, 200, 200);
+                    learnCtx.shadowBlur = 0;
+                    learnCtx.strokeStyle = 'rgba(193,120,60,0.15)';
+                    learnCtx.lineWidth = 2;
+                    learnCtx.strokeText(glyph, 200, 200);
+                    learnCtx.restore();
+
+                    // Draw the pen tip at the right edge of the clip
+                    if (eased < 1) {
+                        const penX = clipX;
+                        const penY = 200; // vertical center
+                        // Draw a glow
+                        const glow = learnCtx.createRadialGradient(penX, penY, 0, penX, penY, 30);
+                        glow.addColorStop(0, 'rgba(255,255,255,0.8)');
+                        glow.addColorStop(0.3, 'rgba(212,160,80,0.4)');
+                        glow.addColorStop(1, 'rgba(212,160,80,0)');
+                        learnCtx.fillStyle = glow;
+                        learnCtx.beginPath();
+                        learnCtx.arc(penX, penY, 30, 0, Math.PI * 2);
+                        learnCtx.fill();
+
+                        // Pen tip circle
+                        learnCtx.beginPath();
+                        learnCtx.arc(penX, penY, 8, 0, Math.PI * 2);
+                        learnCtx.fillStyle = '#fff';
+                        learnCtx.shadowColor = 'rgba(212,160,80,0.6)';
+                        learnCtx.shadowBlur = 20;
+                        learnCtx.fill();
+                        learnCtx.shadowBlur = 0;
+                        learnCtx.strokeStyle = '#C1783C';
+                        learnCtx.lineWidth = 2;
+                        learnCtx.stroke();
+
+                        // Small trail dot
+                        learnCtx.beginPath();
+                        learnCtx.arc(penX - 10, penY, 3, 0, Math.PI * 2);
+                        learnCtx.fillStyle = 'rgba(212,160,80,0.3)';
+                        learnCtx.fill();
+                    }
+
+                    // Draw progress indicator
+                    if (eased < 1) {
+                        learnCtx.fillStyle = 'rgba(193,120,60,0.04)';
+                        learnCtx.fillRect(clipX - 1, 0, 2, 400);
+                    }
+
+                    if (progress < 1) {
+                        animationFrame = requestAnimationFrame(step);
+                    } else {
+                        isAnimating = false;
+                        // Final: show full character with guide overlay
+                        clearLearnCanvas();
+                        showToast('✅ लिखने का तरीका दिखाया गया!');
+                    }
+                }
+
+                animationFrame = requestAnimationFrame(step);
+            }
+
+            // ============================================================
+            // SPEAK
+            // ============================================================
+            function speakChar() {
+                const data = charData[currentLearnIndex];
+                const utterance = new SpeechSynthesisUtterance(data.name);
+                utterance.lang = 'hi-IN';
+                utterance.rate = 0.8;
+                utterance.pitch = 1;
+                window.speechSynthesis.cancel();
+                window.speechSynthesis.speak(utterance);
+                showToast('🔊 ' + data.name + ' सुन रहे हैं...');
+            }
+
+            // ============================================================
+            // PRACTICE CANVAS
+            // ============================================================
+            function initPracticeCanvas() {
+                practiceCanvas.width = 400;
+                practiceCanvas.height = 400;
+                practiceCanvas.style.width = '100%';
+                practiceCanvas.style.height = 'auto';
+                practiceCtx.scale(1, 1);
+                clearPracticeCanvas();
+            }
+
+            function clearPracticeCanvas() {
+                practiceCtx.clearRect(0, 0, 400, 400);
+                practiceCtx.strokeStyle = 'rgba(193,120,60,0.03)';
+                practiceCtx.lineWidth = 0.5;
+                for (let i = 0; i <= 400; i += 40) {
+                    practiceCtx.beginPath();
+                    practiceCtx.moveTo(i, 0);
+                    practiceCtx.lineTo(i, 400);
+                    practiceCtx.stroke();
+                    practiceCtx.beginPath();
+                    practiceCtx.moveTo(0, i);
+                    practiceCtx.lineTo(400, i);
+                    practiceCtx.stroke();
+                }
+                practiceCtx.strokeStyle = 'rgba(193,120,60,0.04)';
+                practiceCtx.lineWidth = 1;
+                practiceCtx.setLineDash([6, 6]);
+                practiceCtx.beginPath();
+                practiceCtx.moveTo(40, 200);
+                practiceCtx.lineTo(360, 200);
+                practiceCtx.stroke();
+                practiceCtx.setLineDash([]);
+            }
+
+            let pracDrawing = false;
+            let pracLastX = 0,
+                pracLastY = 0;
+
+            function getPracPos(e) {
+                const rect = practiceCanvas.getBoundingClientRect();
+                const scaleX = practiceCanvas.width / rect.width;
+                const scaleY = practiceCanvas.height / rect.height;
+                let clientX, clientY;
+                if (e.touches) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                    e.preventDefault();
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
+                return {
+                    x: (clientX - rect.left) * scaleX,
+                    y: (clientY - rect.top) * scaleY
+                };
+            }
+
+            function startPracDraw(e) {
+                e.preventDefault();
+                pracDrawing = true;
+                const pos = getPracPos(e);
+                pracLastX = pos.x;
+                pracLastY = pos.y;
+                practiceCtx.beginPath();
+                practiceCtx.arc(pracLastX, pracLastY, currentPenSize / 3, 0, Math.PI * 2);
+                practiceCtx.fillStyle = currentPenColor;
+                practiceCtx.fill();
+                markLearned(practiceCharIndex);
+                practiceStartTime = Date.now();
+            }
+
+            function drawPrac(e) {
+                e.preventDefault();
+                if (!pracDrawing) return;
+                const pos = getPracPos(e);
+                practiceCtx.beginPath();
+                practiceCtx.moveTo(pracLastX, pracLastY);
+                practiceCtx.lineTo(pos.x, pos.y);
+                practiceCtx.strokeStyle = currentPenColor;
+                practiceCtx.lineWidth = currentPenSize;
+                practiceCtx.lineCap = 'round';
+                practiceCtx.lineJoin = 'round';
+                practiceCtx.stroke();
+                pracLastX = pos.x;
+                pracLastY = pos.y;
+                practiceElapsed += (Date.now() - practiceStartTime);
+                practiceStartTime = Date.now();
+                updatePracticeTime();
+            }
+
+            function endPracDraw(e) {
+                e.preventDefault();
+                pracDrawing = false;
+            }
+
+            practiceCanvas.addEventListener('mousedown', startPracDraw);
+            practiceCanvas.addEventListener('mousemove', drawPrac);
+            practiceCanvas.addEventListener('mouseup', endPracDraw);
+            practiceCanvas.addEventListener('mouseleave', endPracDraw);
+            practiceCanvas.addEventListener('touchstart', startPracDraw, { passive: false });
+            practiceCanvas.addEventListener('touchmove', drawPrac, { passive: false });
+            practiceCanvas.addEventListener('touchend', endPracDraw, { passive: false });
+
+            function updatePracticeTime() {
+                const minutes = Math.floor(practiceElapsed / 60000);
+                homePractice.textContent = minutes + 'm';
+            }
+
+            // ============================================================
+            // SAVE FUNCTIONS
+            // ============================================================
+            function savePracticeAsPNG() {
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = 400;
+                tempCanvas.height = 400;
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCtx.fillStyle = '#0A0806';
+                tempCtx.fillRect(0, 0, 400, 400);
+                tempCtx.drawImage(practiceCanvas, 0, 0);
+                const link = document.createElement('a');
+                link.download = 'kurukh-practice-' + Date.now() + '.png';
+                link.href = tempCanvas.toDataURL('image/png', 1.0);
+                link.click();
+                showToast('💾 PNG सेव हो गया!');
+            }
+
+            async function savePracticeAsPDF() {
+                try {
+                    showToast('📄 PDF बन रहा है...');
+                    const canvas = practiceCanvas;
+                    const imgData = canvas.toDataURL('image/png', 1.0);
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('portrait', 'mm', 'a4');
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = (canvas.height / canvas.width) * pdfWidth;
+                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                    pdf.save('kurukh-practice-' + Date.now() + '.pdf');
+                    showToast('📄 PDF सेव हो गया!');
+                } catch (e) {
+                    console.error(e);
+                    showToast('❌ PDF बनाने में त्रुटि');
+                }
+            }
+
+            // ============================================================
+            // CORE FUNCTIONS
+            // ============================================================
+            function updateLearn() {
+                const data = charData[currentLearnIndex];
+                learnCharDisplay.textContent = data.glyph;
+                learnNameHindi.textContent = data.name;
+                learnNameOdia.textContent = data.nameOdia;
+                learnRoman.textContent = data.roman;
+                learnStrokes.textContent = data.strokes + ' स्ट्रोक';
+                learnIndexDisplay.textContent = currentLearnIndex + 1;
+                learnTotalDisplay.textContent = charData.length;
+
+                if (isAnimating) {
+                    cancelAnimationFrame(animationFrame);
+                    isAnimating = false;
+                }
+                clearLearnCanvas();
+            }
+
+            function nextLearn() {
+                if (currentLearnIndex < charData.length - 1) {
+                    currentLearnIndex++;
+                } else {
+                    currentLearnIndex = 0;
+                }
+                updateLearn();
+                showToast('✨ ' + charData[currentLearnIndex].glyph + ' — ' + charData[currentLearnIndex].name);
+            }
+
+            function prevLearn() {
+                if (currentLearnIndex > 0) {
+                    currentLearnIndex--;
+                } else {
+                    currentLearnIndex = charData.length - 1;
+                }
+                updateLearn();
+                showToast('✨ ' + charData[currentLearnIndex].glyph + ' — ' + charData[currentLearnIndex].name);
+            }
+
+            function markLearned(index) {
+                if (!learnedChars.has(index)) {
+                    learnedChars.add(index);
+                    updateAllProgress();
+                }
+            }
+
+            function updatePracticeChar() {
+                const data = charData[practiceCharIndex % charData.length];
+                practiceCharRef.innerHTML = `
+                    <span style="font-family:'KuruxBanna Xalxo';font-size:60px;">${data.glyph}</span>
+                    <div class="prac-sub">
+                        <span class="prac-lang hi">${data.name}</span>
+                        <span style="color:var(--text-light);margin:0 3px;">·</span>
+                        <span class="prac-lang or">${data.nameOdia}</span>
+                        <span style="color:var(--text-light);margin:0 3px;">·</span>
+                        <span style="color:var(--text-light);">${data.roman}</span>
+                    </div>
+                `;
+                clearPracticeCanvas();
+                showToast('✍️ ' + data.glyph + ' — ' + data.name + ' लिखें');
+            }
+
+            function nextPracticeChar() {
+                practiceCharIndex = (practiceCharIndex + 1) % charData.length;
+                updatePracticeChar();
+            }
+
+            function prevPracticeChar() {
+                if (practiceCharIndex > 0) {
+                    practiceCharIndex--;
+                } else {
+                    practiceCharIndex = charData.length - 1;
+                }
+                updatePracticeChar();
+            }
+
+            function updateAllProgress() {
+                const total = charData.length;
+                const learned = learnedChars.size;
+                const pct = Math.round((learned / total) * 100);
+
+                progressFill.style.width = pct + '%';
+                progressPercentLabel.textContent = pct + '%';
+                progLearned.textContent = learned;
+                progTotal.textContent = total;
+                progPercent.textContent = pct + '%';
+                progBadge.textContent = learned;
+                homeLearned.textContent = learned;
+
+                progressCharGrid.innerHTML = '';
+                charData.forEach((data, i) => {
+                    const div = document.createElement('div');
+                    const isLearned = learnedChars.has(i);
+                    div.className = 'progress-char-item ' + (isLearned ? 'done' : 'pending');
+                    div.innerHTML = `
+                        <span class="p-char">${data.glyph}</span>
+                        <span class="p-status ${isLearned ? 'done' : 'pending'}">${isLearned ? '✅' : '⬜'}</span>
+                    `;
+                    progressCharGrid.appendChild(div);
+                });
+            }
+
+            function populateHomeAlphabet() {
+                alphabetScrollHome.innerHTML = '';
+                const displayChars = charData.slice(0, 16);
+                displayChars.forEach((data) => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'alphabet-chip-wrapper';
+
+                    const chip = document.createElement('div');
+                    chip.className = 'chip-item';
+                    chip.innerHTML = `
+                        <span class="chip-glyph">${data.glyph}</span>
+                        ${data.name}
+                    `;
+
+                    chip.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const utterance = new SpeechSynthesisUtterance(data.name);
+                        utterance.lang = 'hi-IN';
+                        utterance.rate = 0.8;
+                        utterance.pitch = 1;
+                        window.speechSynthesis.cancel();
+                        window.speechSynthesis.speak(utterance);
+                        showToast('🔊 ' + data.name);
+
+                        wrapper.classList.add('show');
+                        clearTimeout(wrapper._popupTimeout);
+                        wrapper._popupTimeout = setTimeout(() => {
+                            wrapper.classList.remove('show');
+                        }, 2500);
+
+                        const idx = charData.indexOf(data);
+                        if (idx !== -1) {
+                            currentLearnIndex = idx;
+                            navigateTo('learn');
+                            updateLearn();
+                        }
+                    });
+
+                    const popup = document.createElement('div');
+                    popup.className = 'chip-popup';
+                    popup.innerHTML = `
+                        <span class="popup-glyph">${data.glyph}</span>
+                        <span class="popup-name">${data.name}</span>
+                        <span class="popup-roman">${data.roman}</span>
+                        <div class="popup-sound">🔊 <span>click to hear</span></div>
+                    `;
+
+                    wrapper.appendChild(chip);
+                    wrapper.appendChild(popup);
+
+                    wrapper.addEventListener('mouseleave', function() {
+                        this.classList.remove('show');
+                        clearTimeout(this._popupTimeout);
+                    });
+
+                    alphabetScrollHome.appendChild(wrapper);
+                });
+            }
+
+            function populateHomeToday() {
+                todayCharsHome.innerHTML = '';
+                const todayList = charData.slice(0, 5);
+                todayList.forEach((data) => {
+                    const div = document.createElement('div');
+                    div.className = 'tp-char';
+                    div.innerHTML = `
+                        ${data.glyph}
+                        <span style="font-family:'Inter',sans-serif;font-size:9px;color:var(--text-light);font-weight:500;">${data.name}</span>
+                    `;
+                    todayCharsHome.appendChild(div);
+                });
+            }
+
+            function populateReferenceGrids() {
+                vowelGrid.innerHTML = '';
+                vowels.forEach((data) => {
+                    const div = document.createElement('div');
+                    div.className = 'ref-item';
+                    div.innerHTML = `
+                        <span class="ref-glyph">${data.glyph}</span>
+                        <span class="ref-name">${data.name}</span>
+                    `;
+                    vowelGrid.appendChild(div);
+                });
+
+                consonantGrid.innerHTML = '';
+                consonants.forEach((data) => {
+                    const div = document.createElement('div');
+                    div.className = 'ref-item';
+                    div.innerHTML = `
+                        <span class="ref-glyph">${data.glyph}</span>
+                        <span class="ref-name">${data.name}</span>
+                    `;
+                    consonantGrid.appendChild(div);
+                });
+            }
+
+            // ============================================================
+            // NAVIGATION
+            // ============================================================
+            function navigateTo(page) {
+                Object.keys(pages).forEach(key => {
+                    pages[key].classList.remove('active');
+                });
+                if (pages[page]) {
+                    pages[page].classList.add('active');
+                }
+
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.page === page) {
+                        item.classList.add('active');
+                    }
+                });
+
+                document.getElementById('appMain').scrollTop = 0;
+
+                if (page === 'learn') {
+                    updateLearn();
+                }
+                if (page === 'progress') updateAllProgress();
+                if (page === 'home') {
+                    populateHomeAlphabet();
+                    populateHomeToday();
+                    populateReferenceGrids();
+                    updateAllProgress();
+                }
+                if (page === 'practice') {
+                    updatePracticeChar();
+                    practiceElapsed = 0;
+                    practiceStartTime = Date.now();
+                    homePractice.textContent = '0m';
+                }
+            }
+
+            // ============================================================
+            // TOAST
+            // ============================================================
+            let toastTimeout;
+
+            function showToast(msg) {
+                toast.textContent = msg;
+                toast.classList.add('show');
+                clearTimeout(toastTimeout);
+                toastTimeout = setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            }
+
+            // ============================================================
+            // THEME TOGGLE
+            // ============================================================
+            function toggleTheme() {
+                isDarkMode = !isDarkMode;
+                document.documentElement.style.colorScheme = isDarkMode ? 'dark' : 'light';
+                showToast(isDarkMode ? '🌙 डार्क थीम' : '☀️ लाइट थीम');
+            }
+
+            // ============================================================
+            // INIT
+            // ============================================================
+            function init() {
+                initLearnCanvas();
+                initPracticeCanvas();
+                initPenControls();
+                initGuideControls();
+
+                populateHomeAlphabet();
+                populateHomeToday();
+                populateReferenceGrids();
+                updateLearn();
+                updatePracticeChar();
+                updateAllProgress();
+
+                setTimeout(checkFontStatus, 500);
+
+                navItems.forEach(item => {
+                    item.addEventListener('click', () => {
+                        navigateTo(item.dataset.page);
+                    });
+                });
+
+                seeAllLinks.forEach(item => {
+                    item.addEventListener('click', () => {
+                        navigateTo(item.dataset.page);
+                    });
+                });
+
+                gridItems.forEach(item => {
+                    item.addEventListener('click', () => {
+                        const page = item.dataset.page;
+                        if (page) {
+                            navigateTo(page);
+                            if (page === 'learn') {
+                                updateLearn();
+                            }
+                            if (page === 'practice') {
+                                updatePracticeChar();
+                            }
+                        }
+                    });
+                });
+
+                document.getElementById('learnNext').addEventListener('click', nextLearn);
+                document.getElementById('learnPrev').addEventListener('click', prevLearn);
+                document.getElementById('learnSpeak').addEventListener('click', speakChar);
+                document.getElementById('learnAnimate').addEventListener('click', animateStrokeOnLearn);
+                document.getElementById('learnClear').addEventListener('click', () => {
+                    clearLearnCanvas();
+                    showToast('🗑️ साफ़ हो गया');
+                });
+
+                document.getElementById('practiceNextChar').addEventListener('click', nextPracticeChar);
+                document.getElementById('practicePrev').addEventListener('click', prevPracticeChar);
+                document.getElementById('practiceClear').addEventListener('click', () => {
+                    clearPracticeCanvas();
+                    showToast('🗑️ साफ़ हो गया');
+                });
+                document.getElementById('practiceSave').addEventListener('click', savePracticeAsPNG);
+                document.getElementById('practiceSavePDF').addEventListener('click', savePracticeAsPDF);
+
+                document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+                document.addEventListener('keydown', (e) => {
+                    const activePage = document.querySelector('.page.active');
+                    if (!activePage) return;
+
+                    if (activePage.id === 'page-learn') {
+                        if (e.key === 'ArrowRight' || e.key === ' ') {
+                            e.preventDefault();
+                            nextLearn();
+                        } else if (e.key === 'ArrowLeft') {
+                            e.preventDefault();
+                            prevLearn();
+                        } else if (e.key === 'a' || e.key === 'A') {
+                            e.preventDefault();
+                            animateStrokeOnLearn();
+                        } else if (e.key === 's' || e.key === 'S') {
+                            e.preventDefault();
+                            speakChar();
+                        }
+                    }
+
+                    if (activePage.id === 'page-practice') {
+                        if (e.key === 'ArrowRight') {
+                            e.preventDefault();
+                            nextPracticeChar();
+                        } else if (e.key === 'ArrowLeft') {
+                            e.preventDefault();
+                            prevPracticeChar();
+                        } else if (e.key === 'c' || e.key === 'C') {
+                            clearPracticeCanvas();
+                            showToast('🗑️ साफ़ हो गया');
+                        }
+                    }
+                });
+
+                setTimeout(() => {
+                    showToast('👋 कुँड़ुख़ सीखने में आपका स्वागत है!');
+                }, 800);
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+
+            window.addEventListener('resize', () => {
+                if (pages.learn.classList.contains('active')) {
+                    clearLearnCanvas();
+                }
+                if (pages.practice.classList.contains('active')) {
+                    clearPracticeCanvas();
+                }
+            });
+
+        })();
+    </script>
+
+</body>
+</html>
